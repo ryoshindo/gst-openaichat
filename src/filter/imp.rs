@@ -70,7 +70,7 @@ struct Settings {
   model: String,
 }
 
-#[derive(Default)]
+#[derive(Default, Debug)]
 struct State {
   history: Vec<OpenaiChatCompletionMessage>,
 }
@@ -224,6 +224,10 @@ impl BaseTransformImpl for OpenaiChatFilter {
       let state = self.state.clone();
 
       RUNTIME.spawn(async move {
+        let raw_prompt = request_body.messages.last().unwrap().content.to_string();
+        let prompt = raw_prompt[0..raw_prompt.len()-1].to_string();
+        println!(">>> {}", prompt);
+
         let request = Request::builder()
           .method(Method::POST)
           .uri(format!("{}", *OPENAI_ENDPOINT))

@@ -6,7 +6,7 @@ pub struct OpenaiChatCompletionRequest {
   pub messages: Vec<OpenaiChatCompletionMessage>,
 }
 
-#[derive(Serialize, Deserialize, Clone)]
+#[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct OpenaiChatCompletionMessage {
   pub role: String,
   pub content: String,
