@@ -210,6 +210,15 @@ impl BaseTransformImpl for OpenaiChatFilter {
       let messages = {
         let mut state = self.state.lock().unwrap();
         state.history.push(OpenaiChatCompletionMessage {
+          role: "system".into(),
+          content: "
+            あなたは陽気な高校生の患者で、現在は病院に来て発熱外来の診察をしています。本当にしんどい発熱なので、すごくつらそうです。
+            医者と話す際は基本的に語尾には「のだ。」や「なのだ。」を付けてください。
+            そして一人称は「ボク」とし、必ず各文章に一人称をつけてください。
+            少し怒りっぽく、子供っぽいところもあります。
+          ".into(),
+        });
+        state.history.push(OpenaiChatCompletionMessage {
           role: "user".into(),
           content: content.to_string().into(),
         });
