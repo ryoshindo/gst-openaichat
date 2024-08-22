@@ -221,13 +221,18 @@ impl BaseTransformImpl for OpenaiChatFilter {
         messages,
       };
 
+      let prompt = request_body.messages.last().unwrap().content.to_string();
+      let mut buffer = Buffer::with_size(prompt.len()).unwrap();
+      buffer
+        .get_mut()
+        .unwrap()
+        .copy_from_slice(0, prompt.as_bytes())
+        .unwrap();
+      src_pad.push(buffer).unwrap();
+
       let state = self.state.clone();
 
       RUNTIME.spawn(async move {
-        let raw_prompt = request_body.messages.last().unwrap().content.to_string();
-        let prompt = raw_prompt[0..raw_prompt.len()-1].to_string();
-        println!(">>> {}", prompt);
-
         let request = Request::builder()
           .method(Method::POST)
           .uri(format!("{}", *OPENAI_ENDPOINT))
