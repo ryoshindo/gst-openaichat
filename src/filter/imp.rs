@@ -62,6 +62,9 @@ static HTTPS_CLIENT: Lazy<hyper::Client<HttpsConnector<HttpConnector>>> = Lazy::
 static OPENAI_API_KEY: Lazy<String> =
   Lazy::new(|| env::var("OPENAI_API_KEY").expect("missing OPENAI_API_KEY environment variable"));
 
+static OPENAI_ENDPOINT: Lazy<String> = 
+  Lazy::new(|| env::var("OPENAI_ENDPOINT").unwrap_or("https://api.openai.com/v1/chat/completions".to_string()));
+
 #[derive(Debug, Clone, Default)]
 struct Settings {
   model: String,
@@ -223,8 +226,8 @@ impl BaseTransformImpl for OpenaiChatFilter {
       RUNTIME.spawn(async move {
         let request = Request::builder()
           .method(Method::POST)
-          .uri("https://api.openai.com/v1/chat/completions")
-          .header("Authorization", format!("Bearer {}", *OPENAI_API_KEY))
+          .uri(format!("{}", *OPENAI_ENDPOINT))
+          .header("api-key", format!("{}", *OPENAI_API_KEY))
           .header("Content-Type", "application/json")
           .body(serde_json::to_vec(&request_body).unwrap().into())
           .unwrap();
