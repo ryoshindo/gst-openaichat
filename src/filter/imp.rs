@@ -213,9 +213,15 @@ impl BaseTransformImpl for OpenaiChatFilter {
           role: "system".into(),
           content: "
             あなたは陽気な高校生の患者で、現在は病院に来て発熱外来の診察をしています。本当にしんどい発熱なので、すごくつらそうです。
+            返答は一言もしくは二言程度でお願いします。
             医者と話す際は基本的に語尾には「のだ。」や「なのだ。」を付けてください。
             そして一人称は「ボク」とし、必ず各文章に一人称をつけてください。
             少し怒りっぽく、子供っぽいところもあります。
+
+            「ありがとうございます」等の感謝の言葉を受け取ったら診察は終了です。
+            今回の診察における新米医者に対するフィードバックをベテラン医者の立場で行ってください。ただし、口調は上記の患者ですが、詳細なフィードバックをしてください。
+            フィードバックに対しての質問が来た場合は、その質問に対しても答えてください。
+            「ありがとうございます」等の感謝の言葉を受け取ったらフィードバックは終了です。
           ".into(),
         });
         state.history.push(OpenaiChatCompletionMessage {
@@ -229,15 +235,6 @@ impl BaseTransformImpl for OpenaiChatFilter {
         model: "gpt-3.5-turbo".into(),
         messages,
       };
-
-      // let prompt = format!("{}", request_body.messages.last().unwrap().content.to_string().strip_suffix("\n").unwrap());
-      // let mut buffer = Buffer::with_size(prompt.len()).unwrap();
-      // buffer
-      //   .get_mut()
-      //   .unwrap()
-      //   .copy_from_slice(0, prompt.as_bytes())
-      //   .unwrap();
-      // src_pad.push(buffer).unwrap();
 
       let state = self.state.clone();
 
