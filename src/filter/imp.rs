@@ -230,14 +230,14 @@ impl BaseTransformImpl for OpenaiChatFilter {
         messages,
       };
 
-      let prompt = request_body.messages.last().unwrap().content.to_string();
-      let mut buffer = Buffer::with_size(prompt.len()).unwrap();
-      buffer
-        .get_mut()
-        .unwrap()
-        .copy_from_slice(0, prompt.as_bytes())
-        .unwrap();
-      src_pad.push(buffer).unwrap();
+      // let prompt = format!("{}", request_body.messages.last().unwrap().content.to_string().strip_suffix("\n").unwrap());
+      // let mut buffer = Buffer::with_size(prompt.len()).unwrap();
+      // buffer
+      //   .get_mut()
+      //   .unwrap()
+      //   .copy_from_slice(0, prompt.as_bytes())
+      //   .unwrap();
+      // src_pad.push(buffer).unwrap();
 
       let state = self.state.clone();
 
